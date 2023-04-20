@@ -1,0 +1,6 @@
+---
+- name: Copy image between registries - {{ image_item }}
+  ansible.builtin.command: |
+    skopeo copy docker://{{ crowdstrike_image_base }}:{{ image_item }} \
+      docker://{{ remote_registry_endpoint }}/{{ remote_registry_image_path }}:{{ image_item }} \
+      --authfile /tmp/cs-auth.json

@@ -20,6 +20,12 @@
     password: "{{ crowdstrike_registry_token }}"
     registry: "{{ crowdstrike_registry_uri }}"
 
+- name: Login to the Remote Image Registry
+  containers.podman.podman_login:
+    username: "{{ remote_registry_username }}"
+    password: "{{ remote_registry_password }}"
+    registry: "{{ remote_registry_endpoint }}"
+
 - name: Gather the list of CrowdStrike Container Image tags
   ansible.builtin.command: "skopeo list-tags docker://{{ crowdstrike_image_base }} --authfile /tmp/cs-auth.json"
   register: falcon_sensor_tags
@@ -30,20 +36,20 @@
   ansible.builtin.debug:
     msg: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
 
-- name: Pull all of the image tags and retag them for the remote registry
-  ansible.builtin.include_tasks: copy-image.yml
+- name: Copy the images with Skopeo
+  ansible.builtin.include_tasks: skopeo-copy.yml
   loop: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
   loop_control:
     loop_var: image_item
 
-- name: Login to the Remote Image Registry
-  containers.podman.podman_login:
-    username: "{{ remote_registry_username }}"
-    password: "{{ remote_registry_password }}"
-    registry: "{{ remote_registry_endpoint }}"
+# - name: Pull all of the image tags and retag them for the remote registry
+#   ansible.builtin.include_tasks: copy-image.yml
+#   loop: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
+#   loop_control:
+#     loop_var: image_item
 
-- name: Push all of the image tags to the remote registry
-  ansible.builtin.include_tasks: push-image.yml
-  loop: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
-  loop_control:
-    loop_var: image_item
+# - name: Push all of the image tags to the remote registry
+#   ansible.builtin.include_tasks: push-image.yml
+#   loop: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
+#   loop_control:
+#     loop_var: image_item
