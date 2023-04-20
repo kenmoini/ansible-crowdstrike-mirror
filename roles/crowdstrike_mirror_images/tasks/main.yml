@@ -36,6 +36,9 @@
   ansible.builtin.debug:
     msg: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
 
+# Instead of using the normal containers.podman.podman_image module, we're going to use the skopeo command
+# This is due to how things work, or rather don't work, in an EE context
+
 - name: Copy the images with Skopeo
   ansible.builtin.include_tasks: skopeo-copy.yml
   loop: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"

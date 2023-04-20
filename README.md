@@ -47,6 +47,20 @@ ansible-playbook -i inventory \
 - Create said Credential of Custom Credential Type
 - Create an Execution Environment with the upstream EE: `quay.io/kenmoini/ansible-crowdstrike-mirror-ee:latest`
 - Create a Project with this repo, set it to use the EE
-- Create a Job Template, associate a localhost Inventory, the Credential, set it to use the EE, enable Privilege Escalation, and select the `mirror.yml` Playbook.
-- Provide it with the additional variables to push to your private image registry
+- Create a Job Template, associate a localhost Inventory, the Credential, set it to use the EE, and select the `mirror.yml` Playbook.
+- Provide it with the additional variables to push to your private image registry:
+
+```yaml
+echo_debug: false # Set to true to enable debug output
+
+crowdstrike_cloud_endpoint: US-2 # default is US-1
+
+crowdstrike_customer_id: 1234567890
+
+remote_registry_endpoint: jfrog.kemo.labs
+remote_registry_image_path: cs-mirror/falcon-sensor
+remote_registry_username: robot-mirror
+remote_registry_password: Passw0rd123!
+```
+
 - Set it to run on a Schedule

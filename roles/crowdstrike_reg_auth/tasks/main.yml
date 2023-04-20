@@ -28,18 +28,23 @@
     method: POST
     body: "client_id={{ crowdstrike_client_id }}&client_secret={{ crowdstrike_client_secret }}"
     body_format: form-urlencoded
-    status_code: [200, 201]
+    status_code: [200, 201, 302, 308]
     return_content: true
     headers:
       Content-Type: "application/x-www-form-urlencoded"
   register: crowdstrike_token
+
+- name: Debug
+  when: echo_debug
+  ansible.builtin.debug:
+    msg: "{{ crowdstrike_token.json }}"
 
 - name: Exchange the active token for an Image Registry Credential
   ansible.builtin.uri:
     url: "https://{{ crowdstrike_api_endpoint }}/container-security/entities/image-registry-credentials/v1"
     headers:
       Authorization: "Bearer {{ crowdstrike_token.json.access_token }}"
-    status_code: [200, 201]
+    status_code: [200, 201, 302, 308]
     return_content: true
   register: crowdstrike_reg_cred
 
