@@ -1,0 +1,43 @@
+---
+# tasks file for crowdstrike_mirror_images
+
+- name: Assert that all of the required variables are set
+  ansible.builtin.assert:
+    that:
+      - crowdstrike_registry_endpoint is defined
+      - crowdstrike_registry_token is defined
+      - crowdstrike_registry_username is defined
+      - remote_registry_endpoint is defined
+      - remote_registry_image_path is defined
+      - remote_registry_username is defined
+      - remote_registry_password is defined
+    fail_msg: "Missing a required variable"
+    success_msg: "All required variables have been detected!"
+
+- name: Login to the CrowdStrike Image Registry
+  containers.podman.podman_login:
+    username: "{{ crowdstrike_registry_username }}"
+    password: "{{ crowdstrike_registry_token }}"
+    registry: "{{ crowdstrike_registry_uri }}"
+
+- name: Login to the Remote Image Registry
+  containers.podman.podman_login:
+    username: "{{ remote_registry_username }}"
+    password: "{{ remote_registry_password }}"
+    registry: "{{ remote_registry_endpoint }}"
+
+- name: Gather the list of CrowdStrike Container Image tags
+  ansible.builtin.command: "skopeo list-tags docker://{{ crowdstrike_image_base }}"
+  register: falcon_sensor_tags
+  changed_when: false
+
+- name: Debug
+  when: echo_debug
+  ansible.builtin.debug:
+    msg: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
+
+- name: Pull all of the image tags, retag them, and push to the remote registry
+  ansible.builtin.include_tasks: copy-image.yml
+  loop: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
+  loop_control:
+    loop_var: image_item

@@ -1,0 +1,32 @@
+galaxy_info:
+  author: Ken Moini
+  description: Mirrors all CrowdStrike Falcon Sensor container images to a private registry
+
+  # If the issue tracker for your role is not on github, uncomment the
+  # next line and provide a value
+  issue_tracker_url: https://github.com/kenmoini/ansible-crowdstrike-mirror/issues
+
+  license: MIT
+
+  min_ansible_version: "2.9"
+
+  platforms:
+    - name: Fedora
+      versions:
+        - all
+    - name: EL
+      versions:
+        - all
+
+  galaxy_tags:
+    - crowdstrike
+    - falcon
+    - sensor
+    - container
+    - image
+    - registry
+    - mirror
+
+dependencies: []
+  # List your role dependencies here, one per line. Be sure to remove the '[]' above,
+  # if you add dependencies to this list.

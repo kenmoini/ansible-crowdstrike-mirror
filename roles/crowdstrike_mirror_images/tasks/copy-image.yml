@@ -1,0 +1,24 @@
+---
+- name: Debug
+  when: echo_debug
+  ansible.builtin.debug:
+    msg:
+      - "Processing image {{ crowdstrike_image_base }}:{{ image_item }}"
+      - "Copying to {{ remote_registry_endpoint }}/{{ remote_registry_image_path }}:{{ image_item }}"
+
+- name: "Pull the image - {{ image_item }}"
+  containers.podman.podman_image:
+    name: "{{ crowdstrike_image_base }}:{{ image_item }}"
+    state: present
+
+- name: Tag the image for the remote registry
+  containers.podman.podman_tag:
+    image: "{{ crowdstrike_image_base }}:{{ image_item }}"
+    target_names:
+      - "{{ remote_registry_endpoint }}/{{ remote_registry_image_path }}:{{ image_item }}"
+
+- name: Push the image to the remote registry
+  containers.podman.podman_image:
+    name: "{{ remote_registry_endpoint }}/{{ remote_registry_image_path }}:{{ image_item }}"
+    state: present
+    push: true

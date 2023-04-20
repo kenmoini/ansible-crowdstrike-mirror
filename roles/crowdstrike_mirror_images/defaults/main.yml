@@ -1,0 +1,15 @@
+---
+# defaults file for crowdstrike_mirror_images
+
+# The CrowdStrike Image Registry endpoint to use
+# Valid values are:
+#   registry
+#   registry.laggar.gcw
+
+crowdstrike_registry_endpoint: registry
+
+# Do not edit below this line
+
+crowdstrike_registry_uri: "{{ crowdstrike_registry_endpoint }}.crowdstrike.com"
+
+crowdstrike_image_base: "{{ crowdstrike_registry_uri }}/falcon-sensor/{{ crowdstrike_cloud_endpoint | lower }}/release/falcon-sensor"

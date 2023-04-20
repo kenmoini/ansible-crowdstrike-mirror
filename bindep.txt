@@ -1,0 +1,3 @@
+jq [platform:rpm]
+podman [platform:rpm]
+skopeo [platform:rpm]

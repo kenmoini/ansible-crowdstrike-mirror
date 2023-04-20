@@ -1,0 +1,61 @@
+---
+# tasks file for crowdstrike_reg_auth
+
+- name: Perform Preflight to ensure all the needed variables are set
+  block:
+
+    - name: Ensure the required variables are set
+      ansible.builtin.assert:
+        that:
+          - crowdstrike_client_id is defined
+          - crowdstrike_client_secret is defined
+          - crowdstrike_customer_id is defined
+        fail_msg: "Missing a required variable"
+        success_msg: "All required variables have been detected!"
+
+- name: Debug
+  when: echo_debug
+  ansible.builtin.debug:
+    msg:
+      - "Cloud Endpoint: {{ crowdstrike_cloud_endpoint }}"
+      - "API Endpoint: {{ crowdstrike_api_endpoint }}"
+      - "Client ID: {{ crowdstrike_client_id }}"
+      - "Client Secret: {{ crowdstrike_client_secret }}"
+
+- name: Exchange the CrowdStrike OAuth Client ID and Secret for an active token
+  ansible.builtin.uri:
+    url: "https://{{ crowdstrike_api_endpoint }}/oauth2/token"
+    method: POST
+    body: "client_id={{ crowdstrike_client_id }}&client_secret={{ crowdstrike_client_secret }}"
+    body_format: form-urlencoded
+    status_code: [200, 201]
+    return_content: true
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
+  register: crowdstrike_token
+
+- name: Exchange the active token for an Image Registry Credential
+  ansible.builtin.uri:
+    url: "https://{{ crowdstrike_api_endpoint }}/container-security/entities/image-registry-credentials/v1"
+    headers:
+      Authorization: "Bearer {{ crowdstrike_token.json.access_token }}"
+    status_code: [200, 201]
+    return_content: true
+  register: crowdstrike_reg_cred
+
+- name: Debug
+  when: echo_debug
+  ansible.builtin.debug:
+    msg: "{{ crowdstrike_reg_cred.json }}"
+
+- name: Set the Image Registry Credentials as a fact
+  ansible.builtin.set_fact:
+    crowdstrike_registry_token: "{{ crowdstrike_reg_cred.json.resources[0].token }}"
+    crowdstrike_registry_username: "fc-{{ ((crowdstrike_customer_id | lower) | split('-'))[0] }}"
+
+- name: Debug
+  when: echo_debug
+  ansible.builtin.debug:
+    msg:
+      - "Registry Token: {{ crowdstrike_registry_token }}"
+      - "Registry Username: {{ crowdstrike_registry_username }}"
