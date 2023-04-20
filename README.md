@@ -1,6 +1,8 @@
 # ansible-crowdstrike-mirror
 
-![Ansible Lint](https://github.com/kenmoini/ansible-crowdstrike-mirror/actions/workflows/ansible-lint.yml/badge.svg) ![Execution Environment](https://github.com/kenmoini/ansible-crowdstrike-mirror/actions/workflows/build-deploy-ee.yml/badge.svg) [![Get Execution Environment on Quay](https://img.shields.io/badge/Quay.io-Get%20EE%20Image-blue)](https://quay.io/kenmoini/ansible-crowdstrike-mirror-ee)
+[![Ansible Lint](https://github.com/kenmoini/ansible-crowdstrike-mirror/actions/workflows/ansible-lint.yml/badge.svg)]((https://github.com/kenmoini/ansible-crowdstrike-mirror/actions/workflows/ansible-lint.yml))
+[![Execution Environment](https://github.com/kenmoini/ansible-crowdstrike-mirror/actions/workflows/build-deploy-ee.yml/badge.svg)](https://github.com/kenmoini/ansible-crowdstrike-mirror/actions/workflows/build-deploy-ee.yml)
+[![Get Execution Environment on Quay](https://img.shields.io/badge/Quay.io-Get%20EE%20Image-blue)](https://quay.io/kenmoini/ansible-crowdstrike-mirror-ee)
 
 This set of Ansible Content will mirror the CrowdStrike Falcon Sensor container images from their registry into your own private registry.
 
