@@ -16,9 +16,3 @@
     image: "{{ crowdstrike_image_base }}:{{ image_item }}"
     target_names:
       - "{{ remote_registry_endpoint }}/{{ remote_registry_image_path }}:{{ image_item }}"
-
-- name: Push the image to the remote registry
-  containers.podman.podman_image:
-    name: "{{ remote_registry_endpoint }}/{{ remote_registry_image_path }}:{{ image_item }}"
-    state: present
-    push: true
