@@ -1,5 +1,7 @@
 # ansible-crowdstrike-mirror
 
+![Ansible Lint](https://github.com/kenmoini/ansible-crowdstrike-mirror/actions/workflows/ansible-lint.yml/badge.svg) ![Execution Environment](https://github.com/kenmoini/ansible-crowdstrike-mirror/actions/workflows/build-deploy-ee.yml/badge.svg) [![Get Execution Environment on Quay](https://img.shields.io/badge/Quay.io-Get%20EE%20Image-blue)](https://quay.io/kenmoini/ansible-crowdstrike-mirror-ee)
+
 This set of Ansible Content will mirror the CrowdStrike Falcon Sensor container images from their registry into your own private registry.
 
 It does this by:
@@ -36,3 +38,13 @@ ansible-playbook -i inventory \
  -e remote_registry_password="Passw0rd123!" \
  mirror.yml
 ```
+
+## Using in Ansible Controller/Tower
+
+- Create a new Custom Credential for the CrowdStrike OAuth 2 Client ID/Secret - see in [./docs/ansible-custom-credentials.md](./docs/ansible-custom-credentials.md)
+- Create said Credential of Custom Credential Type
+- Create an Execution Environment with the upstream EE: `quay.io/kenmoini/ansible-crowdstrike-mirror-ee:latest`
+- Create a Project with this repo, set it to use the EE
+- Create a Job Template, associate a localhost Inventory, the Credential, set it to use the EE, enable Privilege Escalation, and select the `mirror.yml` Playbook.
+- Provide it with the additional variables to push to your private image registry
+- Set it to run on a Schedule
