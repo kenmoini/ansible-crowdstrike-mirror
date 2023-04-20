@@ -7,14 +7,14 @@
   vars:
     echo_debug: false # Set to true to enable debug output
 
-    # crowdstrike_cloud_endpoint: US-2 # default is US-1
+    crowdstrike_cloud_endpoint: US-2 # default is US-1
 
     # crowdstrike_customer_id: 1234567890
 
-    # remote_registry_endpoint: jfrog.kemo.labs
-    # remote_registry_image_path: cs-mirror/falcon-sensor
-    # remote_registry_username: robot-mirror
-    # remote_registry_password: Passw0rd123!
+    remote_registry_endpoint: jfrog.kemo.labs
+    remote_registry_image_path: cs-mirror/falcon-sensor
+    remote_registry_username: robot-mirror
+    remote_registry_password: Passw0rd123!
 
   tasks:
     - name: Authenticate to the Crowdstrike API and get an Image Registry Token

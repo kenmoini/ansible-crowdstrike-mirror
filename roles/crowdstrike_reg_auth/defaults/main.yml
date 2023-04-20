@@ -12,4 +12,6 @@ crowdstrike_cloud_endpoint: US-1
 
 # Do not edit below this line
 
-crowdstrike_api_endpoint: "api.{{ (crowdstrike_cloud_endpoint | lower) if (crowdstrike_cloud_endpoint != 'GOV-1') else 'laggar.gcw' }}.crowdstrike.com"
+api_target: "{{ (crowdstrike_cloud_endpoint | lower + '.') if (crowdstrike_cloud_endpoint not in ['GOV-1', 'US-1']) else '' }}"
+
+crowdstrike_api_endpoint: "api.{{ api_target if (crowdstrike_cloud_endpoint != 'GOV-1') else 'laggar.gcw.' }}crowdstrike.com"
