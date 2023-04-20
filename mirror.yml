@@ -2,7 +2,7 @@
 - name: Mirror CrowdStrike Container Images to a Private Repository
   hosts: all
   gather_facts: true
-  become: true
+  become: false
 
   module_defaults:
     containers.podman.podman_image:
