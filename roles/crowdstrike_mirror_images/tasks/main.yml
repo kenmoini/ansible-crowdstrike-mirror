@@ -21,7 +21,7 @@
     registry: "{{ crowdstrike_registry_uri }}"
 
 - name: Gather the list of CrowdStrike Container Image tags
-  ansible.builtin.command: "skopeo list-tags docker://{{ crowdstrike_image_base }}"
+  ansible.builtin.command: "skopeo list-tags docker://{{ crowdstrike_image_base }} --authfile /tmp/cs-auth.json"
   register: falcon_sensor_tags
   changed_when: false
 
