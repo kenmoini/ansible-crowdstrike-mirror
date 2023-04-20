@@ -36,7 +36,7 @@
   ansible.builtin.debug:
     msg: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
 
-- name: Pull all of the image tags, retag them, and push to the remote registry
+- name: Pull all of the image tags, retag them for the remote registry, and push them
   ansible.builtin.include_tasks: copy-image.yml
   loop: "{{ (falcon_sensor_tags.stdout | from_json).Tags }}"
   loop_control:
